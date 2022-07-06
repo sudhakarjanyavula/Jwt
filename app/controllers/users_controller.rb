@@ -1,18 +1,6 @@
 class UsersController < ApplicationController
 	before_action :authorize_request, except: :create
-  #before_action :find_user, except: %i[create index]
-
-
-  def index
-    @users = User.all
-    render json: @users, status: :ok
-  end
-
-
-  def show
-    render json: @user, status: :ok
-  end
-
+  
 
   def create
     @user = User.new(user_params)
@@ -25,21 +13,33 @@ class UsersController < ApplicationController
   end
 
 
+   def index
+    @user = @current_user
+    render json: @user, status: :ok
+  end
+
   def update
-    unless @user.update(user_params)
-      render json: { errors: @user.errors.full_messages },
+    @user = @current_user
+    @user.update(user_params) if @user
+    render json: { errors: @user.errors.full_messages },
              status: :unprocessable_entity
-    end
+  end
+
+  def show
+    render json: @current_user
   end
 
 
   def destroy
-    @user.destroy
+     @current_user
+     render json: []
   end
+
+
 
   private
 
   def user_params
-    params.permit(:avatar, :name, :username, :email, :password, :password_confirmation)
+    params.permit(:name, :username, :email, :password, :password_confirmation)
   end
 end

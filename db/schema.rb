@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_01_094713) do
+ActiveRecord::Schema.define(version: 2022_07_05_132528) do
+
+  create_table "blacklisted_tokens", force: :cascade do |t|
+    t.string "jti"
+    t.datetime "exp"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["jti"], name: "index_blacklisted_tokens_on_jti", unique: true
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
